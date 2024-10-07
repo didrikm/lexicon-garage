@@ -17,7 +17,6 @@ public class UI : IUI
         mainMenuConfig.AddOption("Print out all vehicle types and their count", WriteTypes);
         mainMenuConfig.AddOption("Print out all vehicles", WriteAll);
 
-        //borde bara skicka med config
         Menu mainMenu = new("Main menu:", mainMenuConfig);
         mainMenu.Run();
         //Här sparas

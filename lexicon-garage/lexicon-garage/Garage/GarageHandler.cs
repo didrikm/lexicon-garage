@@ -124,11 +124,7 @@ public class GarageHandler<T> : IHandler<Vehicle>
     public void SelectVehicles()
     {
         System.Console.WriteLine("Enter vehicle type (or leave blank to skip:)");
-        string type = Console.ReadLine();
-        if (!string.IsNullOrEmpty(type))
-        {
-            type = string.Concat(type[0].ToString().ToUpper(), type.Substring(1).ToLower());
-        }
+        string type = Console.ReadLine().ToLower();
 
         Console.WriteLine("Enter vehicle color (or leave blank to skip):");
         string color = Console.ReadLine().ToLower();
@@ -148,19 +144,34 @@ public class GarageHandler<T> : IHandler<Vehicle>
         Console.WriteLine("Enter fuel type (or leave blank to skip):");
         string fuelType = Console.ReadLine().ToLower();
 
-        Func<Vehicle, bool> predicate = vehicle =>
-            (string.IsNullOrEmpty(type) || vehicle.GetType().Name == type)
-            && (string.IsNullOrEmpty(color) || vehicle.Color == color)
-            && (numberOfWheels == 0 || vehicle.NumberOfWheels == numberOfWheels)
-            && (string.IsNullOrEmpty(fuelType) || vehicle.FuelType == fuelType);
+        var vehicleSelection = _garage
+            .Where(vehicle =>
+                CheckType(vehicle, type)
+                && CheckColor(vehicle, color)
+                && CheckNumberOfWheels(vehicle, numberOfWheels)
+                && CheckFuelType(vehicle, fuelType)
+            )
+            .ToList();
 
-        foreach (Vehicle vehicle in _garage.SelectVehicles(predicate))
+        foreach (Vehicle vehicle in vehicleSelection)
         {
             System.Console.WriteLine(vehicle);
         }
         System.Console.WriteLine("Press any key to continue...");
         Console.ReadKey();
     }
+
+    private static bool CheckType(Vehicle vehicle, string type) =>
+        string.IsNullOrEmpty(type) || vehicle.GetType().Name.ToLower() == type;
+
+    private static bool CheckColor(Vehicle vehicle, string color) =>
+        string.IsNullOrEmpty(color) || vehicle.Color.ToLower() == color;
+
+    private static bool CheckNumberOfWheels(Vehicle vehicle, int numberOfWheels) =>
+        numberOfWheels == 0 || vehicle.NumberOfWheels == numberOfWheels;
+
+    private static bool CheckFuelType(Vehicle vehicle, string fuelType) =>
+        string.IsNullOrEmpty(fuelType) || vehicle.FuelType == fuelType;
 
     public void WriteTypes()
     {

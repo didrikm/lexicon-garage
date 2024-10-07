@@ -52,11 +52,6 @@ public class Garage<T> : IEnumerable<T>
         }
     }
 
-    public IEnumerable<T> SelectVehicles(Func<T, bool> predicate)
-    {
-        return _vehicles.OfType<T>().Where(predicate);
-    }
-
     public int Count
     {
         get { return _vehicles.Count(vehicle => vehicle != null); }

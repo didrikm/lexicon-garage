@@ -7,11 +7,7 @@ public abstract class Vehicle : IVehicle
     private int _numberOfWheels;
     private string _fuelType;
 
-    public string RegistrationNumber
-    {
-        get { return _registrationNumber; }
-        set { _registrationNumber = value; }
-    }
+    public string RegistrationNumber { get; set; }
 
     public string Color
     {
